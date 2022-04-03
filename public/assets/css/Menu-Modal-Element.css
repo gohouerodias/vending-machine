@@ -1,0 +1,44 @@
+.btn-outline-info {
+  background-color: transparent;
+}
+
+.top-menu-wrapper {
+  margin-bottom: 10px;
+  min-height: 50px;
+  width: 100%;
+  z-index: 10000;
+}
+
+.top-menu-wrapper {
+  padding: 0px;
+  background-color: #fff;
+}
+
+.shadow {
+  -webkit-box-shadow: 9px 7px 5px rgba(500, 500, 500, 0.777);
+  -moz-box-shadow: 9px 7px 5px rgba(500, 500, 500, 0.777);
+  box-shadow: 9px 7px 5px rgba(500, 500, 500, 0.777);
+}
+
+.icon-dashboard {
+  padding: 10px;
+}
+
+.select-table:hover {
+  background-color: #eeeeee;
+}
+
+.emotionsdash {
+  width: 40px;
+  height: 40px;
+}
+
+.text-info-emotion-selected {
+  padding: 25px;
+  color: #d1d1e0;
+}
+
+.col-space {
+  padding: 10px;
+}
+
