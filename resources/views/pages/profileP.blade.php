@@ -18,7 +18,7 @@
                 <div class="card mb-3">
                     <div class="card-body text-center shadow">
                         <!--<img class="rounded-circle mb-3 mt-4"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        src="assets/img/product%20icon.png" width="160" height="160">-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                src="assets/img/product%20icon.png" width="160" height="160">-->
                         <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor"
                             class="bi bi-bag-heart" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
@@ -45,34 +45,50 @@
                                     </div>
                                 </div>
 
-                                <!-- you need to include the shieldui css and js assets in order for the charts to work -->
-                                <link rel="stylesheet" type="text/css"
-                                    href="http://www.shieldui.com/shared/components/latest/css/light/all.min.css" />
-                                <script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
+                                <!-- chart bar for sell event -->
+                                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                                <canvas id="myChart" width="10" height="10"></canvas>
+                                <script>
+                                    var labels = <?php echo json_encode($labels); ?>;
+                                    var datas = <?php echo json_encode($data); ?>;
 
-                                <script type="text/javascript">
-                                    jQuery(function($) {
-                                        var data1 = [12, 3, 4, 2, 12, 3, 4, 17, 22, 34, 54, 67];
-                                        var data2 = [3, 9, 12, 14, 22, 32, 45, 12, 67, 45, 55, 7];
-                                        var data3 = [23, 19, 11, 134, 242, 352, 435, 22, 637, 445, 555, 57];
 
-                                        $("#chart1").shieldChart({
-                                            exportOptions: {
-                                                image: false,
-                                                print: false
-                                            },
-                                            axisY: {
+                                    const data = {
+                                        labels: labels,
+                                        datasets: [{
+                                            label: 'My First dataset',
+                                            backgroundColor: 'rgb(25, 99, 132)',
+                                            borderColor: 'rgb(255, 99, 132)',
+                                            data: datas,
+
+                                        }]
+                                    };
+
+                                    const config = {
+                                        type: 'bar',
+                                        data: data,
+                                        options: {
+                                            plugins: {
                                                 title: {
-                                                    text: "Break-Down for selected quarter"
+                                                    display: true,
+                                                    text: 'hello chart'
                                                 }
                                             },
-                                            dataSeries: [{
-                                                seriesType: "bar",
-                                                data: data1
-                                            }]
-                                        });
-                                    });
+                                            scales: {
+                                                y: {
+                                                    stacked: true
+                                                }
+                                            }
+                                        },
+                                    };
                                 </script>
+                                <script>
+                                    const myChart = new Chart(
+                                        document.getElementById('myChart'),
+                                        config
+                                    );
+                                </script>
+                                <!-- End chart bar for sell event -->
                             </div>
 
                         </div>

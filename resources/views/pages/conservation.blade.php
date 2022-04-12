@@ -5,50 +5,101 @@
 
 @section('content')
     <div class="container-fluid">
+
         <div class="d-sm-flex justify-content-between align-items-center mb-4">
             <h3 class="text-dark mb-0">Temperatures et humidité résidant dans chaque chambre</h3>
         </div>
+        <!--room -->
+        <div class="d-sm-flex justify-content-between align-items-center mb-4">
+            <h3 class="text-dark mb-0">{{ $room1->nom }}</h3>
+            <a type="button" href="{{ url('profileC', $room1->id) }}" class="btn btn-primary mr-auto ml-2">Open
+                modal for {{ $room1->nom }}</a>
 
-        @foreach ($data as $data)
-            <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                <h3 class="text-dark mb-0">{{ $data->room->nom }}</h3>
-            </div>
-            <div class="row">
-                <div class="col-md-6 col-xl-3 mb-4">
-                    <div class="card shadow border-left-primary py-2">
-                        <div class="card-body">
-                            <div class="row align-items-center no-gutters">
-                                <div class="col mr-2">
-                                    <div class="text-uppercase text-primary font-weight-bold text-xs mb-1">
-                                        <span>temperature</span>
-                                    </div>
+        </div>
 
-                                    <div class="text-dark font-weight-bold h5 mb-0"><span>{{ $data->temperature }}</span>
-                                    </div>
+        <div class="row">
+            <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-left-primary py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col mr-2">
+                                <div class="text-uppercase text-primary font-weight-bold text-xs mb-1">
+                                    <span>temperature</span>
                                 </div>
-                                <div class="col-auto"><i class="fas fa-temperature-low fa-2x text-gray-300"></i></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-xl-3 mb-5">
-                    <div class="card shadow border-left-success py-2">
-                        <div class="card-body">
-                            <div class="row align-items-center no-gutters">
-                                <div class="col mr-2">
-                                    <div class="text-uppercase text-success font-weight-bold text-xs mb-1">
-                                        <span>Humidité</span>
-                                    </div>
-                                    <div class="text-dark font-weight-bold h5 mb-0"><span>{{ $data->humidity }}</span>
-                                    </div>
+
+                                <div class="text-dark font-weight-bold h5 mb-0"><span>{{ $data1->temperature }}</span>
                                 </div>
-                                <div class="col-auto"><i class="fas fa-percent fa-2x text-gray-300"></i></div>
                             </div>
+                            <div class="col-auto"><i class="fas fa-temperature-low fa-2x text-gray-300"></i></div>
                         </div>
                     </div>
                 </div>
             </div>
-        @endforeach
+            <div class="col-md-6 col-xl-3 mb-5">
+                <div class="card shadow border-left-success py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col mr-2">
+                                <div class="text-uppercase text-success font-weight-bold text-xs mb-1">
+                                    <span>Humidité</span>
+                                </div>
+                                <div class="text-dark font-weight-bold h5 mb-0"><span>{{ $data1->humidity }}</span>
+                                </div>
+                            </div>
+                            <div class="col-auto"><i class="fas fa-percent fa-2x text-gray-300"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end room -->
+
+        <!--room -->
+
+        <div class="d-sm-flex justify-content-between align-items-center mb-4">
+            <h3 class="text-dark mb-0">{{ $room2->nom }}</h3>
+            <a type="link" href="{{ url('profileC', $room2->id) }}" class="btn btn-primary mr-auto ml-2">See more
+                info for {{ $room2->nom }}</a>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-left-primary py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col mr-2">
+                                <div class="text-uppercase text-primary font-weight-bold text-xs mb-1">
+                                    <span>temperature</span>
+                                </div>
+
+                                <div class="text-dark font-weight-bold h5 mb-0"><span>{{ $data2->temperature }}</span>
+                                </div>
+                            </div>
+                            <div class="col-auto"><i class="fas fa-temperature-low fa-2x text-gray-300"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3 mb-5">
+                <div class="card shadow border-left-success py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col mr-2">
+                                <div class="text-uppercase text-success font-weight-bold text-xs mb-1">
+                                    <span>Humidité</span>
+                                </div>
+                                <div class="text-dark font-weight-bold h5 mb-0"><span>{{ $data2->humidity }}</span>
+                                </div>
+                            </div>
+                            <div class="col-auto"><i class="fas fa-percent fa-2x text-gray-300"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end room -->
+
 
         <div class="card shadow mb-4">
             <div class="card-header py-3">
@@ -193,4 +244,7 @@
 
         </div>
     </div>
+
+
+
 @endsection

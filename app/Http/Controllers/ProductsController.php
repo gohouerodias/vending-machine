@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Products;
+use App\Models\SellEvent;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 
 class ProductsController extends Controller
 {
@@ -60,7 +61,19 @@ class ProductsController extends Controller
     public function showOne($id)
     {
         $prod=Products::find($id);
-        return view('pages.profileP',compact('prod'));
+           $SumMP = SellEvent::select(
+                            DB::raw("(SUM(quantity)) as quantity"),
+                            DB::raw("MONTHNAME(sold_at) as month_name")
+                        )
+                        ->whereYear('sold_at', date('Y'))
+                        ->where('product_id', $id)
+                        ->orderBy('sold_at', 'ASC')
+                        ->groupBy(DB::raw("MONTHNAME(sold_at)"))
+                        ->pluck('quantity', 'month_name');
+
+        $labels = $SumMP->keys();
+        $data = $SumMP->values();
+        return view('pages.profileP',compact('prod','labels','data'));
     }
 
     /**

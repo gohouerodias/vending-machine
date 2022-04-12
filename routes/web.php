@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -44,4 +45,6 @@ Route::post('/updateprofile',[App\Http\Controllers\HomeController::class, 'profi
 
 
 
-Route::get('/conservation', [App\Http\Controllers\RoomDataController::class, 'showAll'])->name('conservation');
+Route::get('/conservation', [App\Http\Controllers\RoomController::class, 'show'])->name('conservation');
+Route::get('profileC/{id}', [App\Http\Controllers\RoomController::class, 'showOne'])->name('profileC');
+Route::put('update_room/{id}', [RoomController::class, 'edit']);
