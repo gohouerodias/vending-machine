@@ -10,6 +10,7 @@ class Products extends Model
 {
     use HasFactory;
 
+    public $quantitySell=[];
 
     public function room()
     {

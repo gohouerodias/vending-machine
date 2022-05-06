@@ -167,32 +167,22 @@
                 </div>
             </div>
             <div class="col-lg-5 col-xl-4">
-                <div class="card shadow mb-4">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h6 class="text-primary font-weight-bold m-0">Revenue Sources</h6>
-                        <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle"
-                                aria-expanded="false" data-toggle="dropdown" type="button"><i
-                                    class="fas fa-ellipsis-v text-gray-400"></i></button>
-                            <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
-                                <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item"
-                                    href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
-                                <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something
-                                    else here</a>
+                <div class="col-md-20 col-xs-1 ">
+                    <div class="card shadow mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4>Revenues sources</h4>
+                        </div>
+                        <div class="card-body align-items-center">
+                            <div id="pie_chart"
+                                style="height: 300px; width: auto; align-items: center;align-content: center;align-self: auto;">
                             </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="chart-area"><canvas
-                                data-bss-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Direct&quot;,&quot;Social&quot;,&quot;Referral&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[&quot;#4e73df&quot;,&quot;#1cc88a&quot;,&quot;#36b9cc&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;50&quot;,&quot;30&quot;,&quot;15&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{}}}"></canvas>
-                        </div>
-                        <div class="text-center small mt-4"><span class="mr-2"><i
-                                    class="fas fa-circle text-primary"></i>&nbsp;Direct</span><span
-                                class="mr-2"><i class="fas fa-circle text-success"></i>&nbsp;Social</span><span
-                                class="mr-2"><i class="fas fa-circle text-info"></i>&nbsp;Refferal</span></div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!--progres de vente -->
         <div class="row">
             <div class="col-lg-6 mb-4">
                 <div class="card shadow mb-4">
@@ -200,37 +190,59 @@
                         <h6 class="text-primary font-weight-bold m-0">Progrès de vente&nbsp;</h6>
                     </div>
                     <div class="card-body">
-                        <h4 class="small font-weight-bold">Pain<span class="float-right">20%</span>
-                        </h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-danger" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"
-                                style="width: 20%;"><span class="sr-only">20%</span></div>
-                        </div>
-                        <h4 class="small font-weight-bold">Croissant<span class="float-right">40%</span></h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-warning" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
-                                style="width: 40%;"><span class="sr-only">40%</span></div>
-                        </div>
-                        <h4 class="small font-weight-bold">Oeuf<span class="float-right">60%</span>
-                        </h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-primary" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
-                                style="width: 60%;"><span class="sr-only">60%</span></div>
-                        </div>
-                        <h4 class="small font-weight-bold">Viande<span class="float-right">80%</span>
-                        </h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-info" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
-                                style="width: 80%;"><span class="sr-only">80%</span></div>
-                        </div>
-                        <h4 class="small font-weight-bold">Saucisse<span class="float-right">Complete!</span></h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-success" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
-                                style="width: 100%;"><span class="sr-only">100%</span></div>
-                        </div>
+                        @foreach ($prods as $item)
+                            @php
+                                $value = $item->quantity_init;
+                                $value2 = countQuantiy($item->quantitySell);
+
+                                $percent = intval(($value2 * 100) / $value);
+                                $col = 'danger';
+                                if ($percent <= 45) {
+                                    $col = 'success';
+                                }
+                                if ($percent > 45 && $percent <= 60) {
+                                    $col = 'warning';
+                                }
+                                if ($percent > 60 || $percent >= 100) {
+                                    $col = 'danger';
+                                }
+                                $text = alertQuantity($item->id);
+                            @endphp
+                            <h4 class="small font-weight-bold">{{ $item->name }}<span
+                                    class="float-right">{{ $text ? $text : $percent . '%' }}</span>
+                            </h4>
+
+                            <div class="progress mb-4">
+                                <div class="progress-bar bg-{{ $col }}" aria-valuenow="20" aria-valuemin="0"
+                                    aria-valuemax="100" style="width: {{ $percent }}%;"><span
+                                        class="sr-only">{{ $percent . '%' }}</span>
+                                </div>
+                            </div>
+                        @endforeach
+
+
                     </div>
                 </div>
             </div>
         </div>
+
+        <!--End progres de vente -->
     </div>
+    <script type="text/javascript">
+        var analytics = <?php echo $array; ?>
+
+        google.charts.load('current', {
+            'packages': ['corechart']
+        });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable(analytics);
+            var options = {
+                title: 'current sales turnover in percentage (XOF)'
+            };
+            var chart = new google.visualization.PieChart(document.getElementById('pie_chart'));
+            chart.draw(data, options);
+        }
+    </script>
 @endsection

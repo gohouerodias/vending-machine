@@ -18,7 +18,7 @@
                 <div class="card mb-3">
                     <div class="card-body text-center shadow">
                         <!--<img class="rounded-circle mb-3 mt-4"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                src="assets/img/product%20icon.png" width="160" height="160">-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    src="assets/img/product%20icon.png" width="160" height="160">-->
                         <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor"
                             class="bi bi-bag-heart" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
@@ -159,19 +159,45 @@
                                             Update data</button></div>
                                 </form>
                             </div>
+                            @php
+                                $value = $prod->quantity_init;
+                                $value2 = countQuantiy($prod->quantitySell);
+
+                                $percent = intval(($value2 * 100) / $value);
+
+                                $col = 'danger';
+                                if ($percent > 0 && $percent <= 45) {
+                                    $col = 'success';
+                                } elseif ($percent > 45 && $percent < 60) {
+                                    $col = 'warning';
+                                } elseif ($percent >= 60 && $percent < 100) {
+                                    $col = 'danger';
+                                }
+
+                            @endphp
                             <div class="progress">
-                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                                    aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-{{ $col }}"
+                                    role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
+                                    style="width: {{ $percent }}%"></div>
                             </div>
                         </div>
                         <div class="alert alert-success alert-dismissible">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
                             <strong>Success!</strong> Indicates a successful or positive action.
                         </div>
-                        <div class="alert alert-danger alert-dismissible">
-                            <button type="button" class="close" data-dismiss="alert">&times;</button>
-                            <strong>Warning!</strong> product insufficient
-                        </div>
+                        @php
+                            $message = alertQuantity($prod->id);
+
+                            if ($message != '') {
+                                echo "  <div class='alert alert-danger alert-dismissible'>
+                                                        <button type='button' class='close' data-dismiss='alert'>&times;</button>
+                                                        <strong>Warning!</strong> " .
+                                    $message .
+                                    "
+                                                    </div>";
+                            }
+                        @endphp
+
 
 
                     </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Products;
 use App\Models\Room;
 use App\Models\RoomData;
 use Illuminate\Http\Request;
@@ -56,8 +57,9 @@ class RoomController extends Controller
         $room2=Room::find(2);
         $data1=RoomData::orderBy('id', 'DESC')->where('room_id','1')->first();
         $data2=RoomData::orderBy('id', 'DESC')->where('room_id','2')->first();
+        $prod=Products::get();
 
-        return view('pages.conservation',compact('room1','room2','data1','data2'));
+        return view('pages.conservation',compact('room1','room2','data1','data2','prod'));
     }
 
 

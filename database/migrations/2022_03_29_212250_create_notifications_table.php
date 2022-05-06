@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('message');
             $table->timestamps();
-            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('product_id')->nullable();
             $table->foreign('product_id')
                   ->references('id')
                   ->on('products')

@@ -7,6 +7,8 @@ use App\Models\SellEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use function PHPUnit\Framework\returnValue;
+
 class ProductsController extends Controller
 {
     /**
@@ -49,19 +51,48 @@ class ProductsController extends Controller
     public function showAll()
     {
         //shows all products
-        $input=array("primary","danger","success ", "info","secondary");
+        $input=array("primary","danger","success ", "info","secondary","warning");
         $rand_keys=array_rand($input,2);
         $str= $input[$rand_keys[0]]."";
+
+        $products_ids=[];
         $prods=Products::get();
-        return view('pages.home',compact('prods','str'));
+        foreach($prods as $product){
+            $products_ids[$product->id]=$product;
+        }
+
+        $quantityS=calcul($products_ids);
+        foreach ($quantityS as $quantity ) {
+           $products_ids[$quantity->product_id]->quantitySell[]=$quantity->quantity;
+        }
+
+        //calcul du chiffre d'affaire mensuel
+        $array[] = ['nom', 'totalSell'];
+        foreach($prods as $key => $value)
+        {
+          $value2=countQuantiy($value->quantitySell)*$value->price_unit;
+          $array[++$key] = [$value->name,$value2 ];
+        }
+
+       /** foreach ($prods as $key ) {
+          countQuantiy($key->quantitySell);
+        } **/
+        return view('pages.home',compact('prods','str'))->with('array', json_encode($array));;
     }
 
 
 
     public function showOne($id)
-    {
+    {   $products_ids=[];
         $prod=Products::find($id);
-           $SumMP = SellEvent::select(
+        $products_ids[$id]=$prod;
+        $quantityS=calcul($products_ids);
+        foreach ($quantityS as $quantity ) {
+           $products_ids[$quantity->product_id]->quantitySell[]=$quantity->quantity;
+
+        }
+
+        $SumMP = SellEvent::select(
                             DB::raw("(SUM(quantity)) as quantity"),
                             DB::raw("MONTHNAME(sold_at) as month_name")
                         )
@@ -82,9 +113,8 @@ class ProductsController extends Controller
      * @param  \App\Models\Products  $products
      * @return \Illuminate\Http\Response
      */
-    public function edit(Products $products)
+    public function edit()
     {
-        //
     }
 
     /**
@@ -116,4 +146,5 @@ class ProductsController extends Controller
     {
         //
     }
+
 }

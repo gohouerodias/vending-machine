@@ -29,6 +29,8 @@ class SellEventController extends Controller
         //
     }
 
+
+
     /**
      * Store a newly created resource in storage.
      *
@@ -47,9 +49,10 @@ class SellEventController extends Controller
           */
     public function show(SellEvent $sellEvent)
     {
-     $historique=SellEvent::orderBy('id','desc')->paginate(2);
-
-     return view('pages.historique',['historique'=>$historique]);
+        $sellEvent=DB::table('sell_events');
+        $number=$sellEvent->count('id');
+        $historique=SellEvent::orderBy('id','desc')->paginate(intval($number/2));
+        return view('pages.historique',['historique'=>$historique]);
     }
 
     /**

@@ -106,26 +106,18 @@
                 <h6 class="text-primary font-weight-bold m-0">Durée de conservation</h6>
             </div>
             <div class="card-body">
-                <h4 class="small font-weight-bold">Croissant<span class="float-right">5 jours</span></h4>
-                <div class="progress mb-4">
-                    <div class="progress-bar bg-warning" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
-                        style="width: 40%;"><span class="sr-only">40%</span></div>
-                </div>
-                <h4 class="small font-weight-bold">Oeuf<span class="float-right">7 jours</span></h4>
-                <div class="progress mb-4">
-                    <div class="progress-bar bg-primary" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
-                        style="width: 60%;"><span class="sr-only">60%</span></div>
-                </div>
-                <h4 class="small font-weight-bold">Viande<span class="float-right">11 jours&nbsp;</span></h4>
-                <div class="progress mb-4">
-                    <div class="progress-bar bg-info" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
-                        style="width: 80%;"><span class="sr-only">80%</span></div>
-                </div>
-                <h4 class="small font-weight-bold">Saucisse<span class="float-right">2 semaines !</span></h4>
-                <div class="progress mb-4 bg-danger" style="color: var(--danger);">
-                    <div class="progress-bar bg-success bg-danger" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
-                        style="width: 100%;"><span class="sr-only">100%</span></div>
-                </div>
+                @foreach ($prod as $prod)
+                    @php
+                        $rodi = alertExpiration($prod);
+                    @endphp
+                    <h4 class="small font-weight-bold">{{ $prod->name }}<span
+                            class="float-right">{{ $rodi[0]['message'] == '.' ? $rodi[0][0] : $rodi[0]['message'] }}</span>
+                    </h4>
+                    <div class="progress mb-4">
+                        <div class="progress-bar bg-warning" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
+                            style="width: {{ $rodi['percent'] }}%;"><span class="sr-only">40%</span></div>
+                    </div>
+                @endforeach
             </div>
         </div>
 

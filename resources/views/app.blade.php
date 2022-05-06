@@ -13,6 +13,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/Menu-Modal-Element-1.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/Menu-Modal-Element.css') }}">
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
     <!--chart bar script-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>

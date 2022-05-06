@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Products;
 use App\Models\RoomData;
 use Illuminate\Http\Request;
 
@@ -60,7 +61,8 @@ class RoomDataController extends Controller
     {
         //
           $data=RoomData::get();
-        return view('pages.conservation',compact('data'));
+
+        return view('pages.conservation',compact('data',));
     }
 
 
