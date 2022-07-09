@@ -27,7 +27,7 @@
                                     <span>temperature</span>
                                 </div>
 
-                                <div class="text-dark font-weight-bold h5 mb-0"><span>{{ $data1->temperature }}</span>
+                                <div class="text-dark font-weight-bold h5 mb-0"><span id="temp1">0</span>
                                 </div>
                             </div>
                             <div class="col-auto"><i class="fas fa-temperature-low fa-2x text-gray-300"></i></div>
@@ -43,7 +43,7 @@
                                 <div class="text-uppercase text-success font-weight-bold text-xs mb-1">
                                     <span>Humidité</span>
                                 </div>
-                                <div class="text-dark font-weight-bold h5 mb-0"><span>{{ $data1->humidity }}</span>
+                                <div class="text-dark font-weight-bold h5 mb-0"><span id="hum1">0</span>
                                 </div>
                             </div>
                             <div class="col-auto"><i class="fas fa-percent fa-2x text-gray-300"></i></div>
@@ -73,7 +73,7 @@
                                     <span>temperature</span>
                                 </div>
 
-                                <div class="text-dark font-weight-bold h5 mb-0"><span>{{ $data2->temperature }}</span>
+                                <div class="text-dark font-weight-bold h5 mb-0"><span id="temp2">0</span>
                                 </div>
                             </div>
                             <div class="col-auto"><i class="fas fa-temperature-low fa-2x text-gray-300"></i></div>
@@ -89,7 +89,7 @@
                                 <div class="text-uppercase text-success font-weight-bold text-xs mb-1">
                                     <span>Humidité</span>
                                 </div>
-                                <div class="text-dark font-weight-bold h5 mb-0"><span>{{ $data2->humidity }}</span>
+                                <div class="text-dark font-weight-bold h5 mb-0"><span id="hum2">0</span>
                                 </div>
                             </div>
                             <div class="col-auto"><i class="fas fa-percent fa-2x text-gray-300"></i></div>
@@ -236,7 +236,23 @@
 
         </div>
     </div>
+    <script>
+        let getData = function() {
+            var min = 0;
+            var max = 100;
+            return Math.floor(Math.random() * (+max - +min)) + +min;
+        };
 
+        setInterval(
+            function() {
+                document.getElementById("temp1").innerHTML = getData();
+                document.getElementById("hum1").innerHTML = getData();
+                document.getElementById("temp2").innerHTML = getData();
+                document.getElementById("hum2").innerHTML = getData();
+            },
+            1000
+        );
+    </script>
 
 
 @endsection

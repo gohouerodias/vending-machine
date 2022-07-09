@@ -13,16 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('notifications', function (Blueprint $table) {
+        Schema::create('card__subscribers', function (Blueprint $table) {
             $table->id();
-            $table->string('message');
+            $table->string('idUninque');
+            $table->double('solde')->default(0);
+            $table->timestamp('refill_at');
             $table->timestamps();
-            $table->unsignedBigInteger('product_id')->nullable();
-            $table->foreign('product_id')
-                ->references('id')
-                ->on('products')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
         });
     }
 
@@ -33,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notifications');
+        Schema::dropIfExists('card__subscribers');
     }
 };

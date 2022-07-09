@@ -51,60 +51,61 @@ class ProductsController extends Controller
     public function showAll()
     {
         //shows all products
-        $input=array("primary","danger","success ", "info","secondary","warning");
-        $rand_keys=array_rand($input,2);
-        $str= $input[$rand_keys[0]]."";
+        $input = array("primary", "danger", "success ", "info", "secondary", "warning");
+        $rand_keys = array_rand($input, 2);
+        $str = $input[$rand_keys[0]] . "";
 
-        $products_ids=[];
-        $prods=Products::get();
-        foreach($prods as $product){
-            $products_ids[$product->id]=$product;
+        $products_ids = [];
+        $prods = Products::get();
+        foreach ($prods as $product) {
+            $products_ids[$product->id] = $product;
         }
 
-        $quantityS=calcul($products_ids);
-        foreach ($quantityS as $quantity ) {
-           $products_ids[$quantity->product_id]->quantitySell[]=$quantity->quantity;
+        $quantityS = calcul($products_ids);
+        foreach ($quantityS as $quantity) {
+            $products_ids[$quantity->product_id]->quantitySell[] = $quantity->quantity;
         }
 
         //calcul du chiffre d'affaire mensuel
         $array[] = ['nom', 'totalSell'];
-        foreach($prods as $key => $value)
-        {
-          $value2=countQuantiy($value->quantitySell)*$value->price_unit;
-          $array[++$key] = [$value->name,$value2 ];
+        foreach ($prods as $key => $value) {
+            $value2 = countQuantiy($value->quantitySell) * $value->price_unit;
+            $array[++$key] = [$value->name, $value2];
         }
-
-       /** foreach ($prods as $key ) {
+        $tab = googleLineGraph();
+        /** foreach ($prods as $key ) {
           countQuantiy($key->quantitySell);
         } **/
-        return view('pages.home',compact('prods','str'))->with('array', json_encode($array));;
+        return view('pages.home', compact('prods', 'str'))->with('array', json_encode($array))->with('tab', json_encode($tab));
     }
 
 
 
     public function showOne($id)
-    {   $products_ids=[];
-        $prod=Products::find($id);
-        $products_ids[$id]=$prod;
-        $quantityS=calcul($products_ids);
-        foreach ($quantityS as $quantity ) {
-           $products_ids[$quantity->product_id]->quantitySell[]=$quantity->quantity;
+    {
+        $products_ids = [];
+        $prod = Products::find($id);
+        $products_ids[$id] = $prod;
+        $quantityS = calcul($products_ids);
 
+        foreach ($quantityS as $quantity) {
+            $products_ids[$quantity->product_id]->quantitySell[] = $quantity->quantity;
         }
 
+
         $SumMP = SellEvent::select(
-                            DB::raw("(SUM(quantity)) as quantity"),
-                            DB::raw("MONTHNAME(sold_at) as month_name")
-                        )
-                        ->whereYear('sold_at', date('Y'))
-                        ->where('product_id', $id)
-                        ->orderBy('sold_at', 'ASC')
-                        ->groupBy(DB::raw("MONTHNAME(sold_at)"))
-                        ->pluck('quantity', 'month_name');
+            DB::raw("(SUM(quantity)) as quantity"),
+            DB::raw("MONTHNAME(sold_at) as month_name")
+        )
+            ->whereYear('sold_at', date('Y'))
+            ->where('product_id', $id)
+            ->orderBy('sold_at', 'ASC')
+            ->groupBy(DB::raw("MONTHNAME(sold_at)"))
+            ->pluck('quantity', 'month_name');
 
         $labels = $SumMP->keys();
         $data = $SumMP->values();
-        return view('pages.profileP',compact('prod','labels','data'));
+        return view('pages.profileP', compact('prod', 'labels', 'data'));
     }
 
     /**
@@ -124,16 +125,32 @@ class ProductsController extends Controller
      * @param  \App\Models\Products  $products
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
         $products = Products::find($id);
-        $products->name = $request->input('name');
-        $products->description = $request->input('description');
-        $products->quantity_init = $request->input('quantity');
-        $products->price_unit = $request->input('price');
-        $products->expiration_date = $request->input('expiration_date');
+        $products->name = request('name', null);
+        $products->description = request('description', null);
+        $products->quantity_init = request('quantity', null);;
+        $products->price_unit = request('price', null);;
+        $products->expiration_date = request('expiration_date', null);;
         $products->update();
-        return redirect()->back()->with('status','Products Updated Successfully');
+        return redirect()->back()->with('status', 'Products Updated Successfully');
+    }
+
+    public function imageUploadPost(Request $request, $id)
+    {
+        $products = Products::find($id);
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        $name = str_replace(' ', '', $products->name);
+        $imageName = $name . '.' . $request->image->extension();
+        /* Store $imageName name in DATABASE from HERE */
+        $products->image = $imageName;
+        $products->save();
+        $request->image->move(public_path('images'), $imageName);
+        return back()
+            ->with('success', 'You have successfully upload image.');
     }
 
     /**
@@ -146,5 +163,4 @@ class ProductsController extends Controller
     {
         //
     }
-
 }

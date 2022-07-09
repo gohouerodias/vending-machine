@@ -10,9 +10,10 @@ class Notifications extends Model
     use HasFactory;
     protected $fillable = [
         'message',
+        'product_id'
     ];
     public function product()
     {
-      return $this->belongsTo(Products::class);
+        return $this->belongsTo(Products::class);
     }
 }

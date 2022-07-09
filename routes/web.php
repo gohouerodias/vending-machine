@@ -2,12 +2,15 @@
 
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\RoomController;
+use App\Models\SellEvent;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
+
 use Illuminate\Support\Str;
 /*
 |--------------------------------------------------------------------------
@@ -20,11 +23,21 @@ use Illuminate\Support\Str;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::post("/data", function (Request $request) {
+    info($request);
+    dd($request);
+    SellEvent::create([
+        'quantity' => $request['temperature'],
+
+    ]);
+    return $request;
 });
 
+Route::get('/', [App\Http\Controllers\Controller::class, 'showAll']);
 
+Route::get('/card', function () {
+    return view('pages.card_validation');
+});
 
 Route::get('/profile product', function () {
     return view('pages.profileP');
@@ -32,22 +45,24 @@ Route::get('/profile product', function () {
 
 
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/home', [App\Http\Controllers\ProductsController::class, 'showAll'])->name('home');
 
 Route::get('profileP/{id}', [App\Http\Controllers\ProductsController::class, 'showOne'])->name('profileP');
-Route::put('update_product/{id}', [ProductsController::class, 'update']);
-
+Route::post('update_product/{id}', [ProductsController::class, 'update']);
+Route::post('image-upload-product/{id}', [ProductsController::class, 'imageUploadPost'])->name('image.upload.product.post');
 
 Route::get('/sellevent', [App\Http\Controllers\SellEventController::class, 'show'])->name('sellevent');
 
 
 Route::get('/profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile');
-Route::post('/updateprofile',[App\Http\Controllers\HomeController::class, 'profileUpdate']);
+Route::post('/updateprofile', [App\Http\Controllers\HomeController::class, 'profileUpdate'])->middleware(['auth', 'verified']);
+Route::post('image-upload', [App\Http\Controllers\HomeController::class, 'imageUploadPost'])->name('image.upload.post');
 
+Route::post('/updatePassword', [App\Http\Controllers\HomeController::class, 'changePassword']);
 
 
 Route::get('/conservation', [App\Http\Controllers\RoomController::class, 'show'])->name('conservation');
@@ -61,12 +76,18 @@ Route::get('/forgot-password', function () {
 
 Route::post('/forgot-password', function (Request $request) {
     $request->validate(['email' => 'required|email']);
-    $email= $request->only('email');
-    $status = Password::sendResetLink($email);
+    $email = $request->only('email');
 
-    return $status === Password::RESET_LINK_SENT
-                ? back()->with(['status' => __($status)])
-                : back()->withErrors(['email' => __($status)]);
+    $user = User::where('email', $email)->exists();
+
+    if (!$user) {
+        return  back()->withErrors(['email' => __("Email doesn't exist")]);
+    } else {
+        $status = Password::sendResetLink($email);
+        return $status === Password::RESET_LINK_SENT
+            ? back()->with(['status' => __($status)])
+            : back()->withErrors(['email' => __($status)]);
+    }
 })->middleware('guest')->name('password.email');
 
 Route::get('/reset-password/{token}', function ($token) {
@@ -95,6 +116,6 @@ Route::post('/reset-password', function (Request $request) {
     );
 
     return $status === Password::PASSWORD_RESET
-                ? redirect()->route('login')->with('status', __($status))
-                : back()->withErrors(['email' => [__($status)]]);
+        ? redirect()->route('login')->with('status', __($status))
+        : back()->withErrors(['email' => [__($status)]]);
 })->middleware('guest')->name('password.update');

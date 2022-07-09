@@ -17,15 +17,43 @@
             <div class="col-lg-4">
                 <div class="card mb-3">
                     <div class="card-body text-center shadow">
-                        <!--<img class="rounded-circle mb-3 mt-4"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    src="assets/img/product%20icon.png" width="160" height="160">-->
-                        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor"
-                            class="bi bi-bag-heart" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5Zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0ZM14 14V5H2v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1ZM8 7.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z" />
-                        </svg>
-                        <div class="mb-3"><button class="btn btn-primary btn-sm" type="button">Change Photo</button>
-                        </div>
+                        <img class="img-fluid" alt="{{ $prod->image }}" src=" {{ asset('images/' . $prod->image) }}"
+                            width="250" height="250">
+
+
+                        @if ($message = Session::get('success'))
+                            <div class="alert alert-success alert-block">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <strong>{{ $message }}</strong>
+                            </div>
+                        @endif
+
+                        @if (count($errors) > 0)
+                            <div class="alert alert-danger">
+                                <strong>Whoops!</strong> There were some problems with your input.
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        <form action="{{ url('image-upload-product/' . $prod->id) }}" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <div class="row">
+
+                                <div class="col-md-7">
+                                    <input type="file" name="image" class="form-control">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-success">Upload</button>
+                                </div>
+
+                            </div>
+                        </form>
+
                     </div>
                     <div class="row">
                         <div class="col">
@@ -105,7 +133,7 @@
                             <div class="card-body">
                                 <form action="{{ url('update_product/' . $prod->id) }}" method="POST">
                                     @csrf
-                                    @method('PUT')
+
                                     <div class="form-row">
                                         <div class="col">
                                             <div class="form-group"><label for="productname"><strong>Product
@@ -139,9 +167,8 @@
                                         </div>
                                         <div class="col">
                                             <div class="form-group"><label for="expiration_date"><strong>Expiration
-                                                        date</strong><br></label><input class="form-control"
-                                                    type="datetime" name="expiration_date"
-                                                    value="{{ $prod->expiration_date }}">
+                                                        date</strong><br></label><input class="form-control" type="date"
+                                                    name="expiration_date" value="{{ $prod->expiration_date }}">
                                             </div>
                                         </div>
                                     </div>
@@ -163,6 +190,7 @@
                                 $value = $prod->quantity_init;
                                 $value2 = countQuantiy($prod->quantitySell);
 
+                                $restant = $value - $value2;
                                 $percent = intval(($value2 * 100) / $value);
 
                                 $col = 'danger';
@@ -175,6 +203,7 @@
                                 }
 
                             @endphp
+                            <h6>Nombre restant actuellement : {{ $restant }} </h6>
                             <div class="progress">
                                 <div class="progress-bar progress-bar-striped progress-bar-animated bg-{{ $col }}"
                                     role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
@@ -190,11 +219,11 @@
 
                             if ($message != '') {
                                 echo "  <div class='alert alert-danger alert-dismissible'>
-                                                        <button type='button' class='close' data-dismiss='alert'>&times;</button>
-                                                        <strong>Warning!</strong> " .
+                                                                                                                                                                                                            <button type='button' class='close' data-dismiss='alert'>&times;</button>
+                                                                                                                                                                                                            <strong>Warning!</strong> " .
                                     $message .
                                     "
-                                                    </div>";
+                                                                                                                                                                                                        </div>";
                             }
                         @endphp
 

@@ -9,21 +9,29 @@ use Illuminate\Support\Facades\DB;
 
 class Kernel extends ConsoleKernel
 {
+
+    protected $commands = [
+        Commands\notification::class,
+    ];
+
     /**
      * Define the application's command schedule.
      *
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
+
+
     protected function schedule(Schedule $schedule)
     {
-        //$schedule->command('inspire')->everyMinute();
-        $schedule->call(function () {
-           Notifications::create([
+        //$schedule->command('Notification')->everyMinute();
+        $schedule->command('notification:cron')->everyMinute();
+        /**  $schedule->call(function () {
+            Notifications::create([
                 'message' => 'oko',
                 'product_id' => 2,
             ]);
-        })->everyMinute();
+        })->everyMinute();*/
     }
 
     /**
@@ -33,7 +41,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

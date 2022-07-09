@@ -16,13 +16,14 @@ return new class extends Migration
         Schema::create('sell_events', function (Blueprint $table) {
             $table->id();
             $table->integer('quantity');
+            $table->integer('Card_Subscribers_id');
             $table->timestamp('sold_at');
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')
-                  ->references('id')
-                  ->on('products')
-                  ->onDelete('cascade')
-                  ->onUpdate('cascade');
+                ->references('id')
+                ->on('products')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 

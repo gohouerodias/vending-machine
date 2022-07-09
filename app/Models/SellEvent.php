@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class SellEvent extends Model
 {
     use HasFactory;
-
-     public function product()
-    {
-      return $this->belongsTo(Products::class);
-    }
+    protected $tableName = "SellEvent";
+    protected $fillable = [
+        'quantity',
+        'sold_at',
+        'Card_Subscribers_id',
+        'product_id',
+    ];
 }

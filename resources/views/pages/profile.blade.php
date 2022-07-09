@@ -10,15 +10,41 @@
             <div class="col-lg-4">
                 <div class="card mb-3">
                     <div class="card-body text-center shadow">
-                        <!--<img class="rounded-circle mb-3 mt-4"
-                                                                                                                                                                                                src="assets/img/Screenshot%202022-02-17%20171714.png" width="160" height="160">-->
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="160" height="160">
-                            <path
-                                d="M12 2.5a5.25 5.25 0 00-2.519 9.857 9.005 9.005 0 00-6.477 8.37.75.75 0 00.727.773H20.27a.75.75 0 00.727-.772 9.005 9.005 0 00-6.477-8.37A5.25 5.25 0 0012 2.5z">
-                            </path>
-                        </svg>
-                        <div class="mb-3"><button class="btn btn-primary btn-sm" type="button">Change Photo</button>
-                        </div>
+                        <img class="img-fluid" alt="Responsive image" src="images/{{ Auth::user()->image }}"
+                            width="250" height="250">
+
+                        @if ($message = Session::get('success'))
+                            <div class="alert alert-success alert-block">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <strong>{{ $message }}</strong>
+                            </div>
+                        @endif
+
+                        @if (count($errors) > 0)
+                            <div class="alert alert-danger">
+                                <strong>Whoops!</strong> There were some problems with your input.
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        <form action="{{ route('image.upload.post') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="row">
+
+                                <div class="col-md-7">
+                                    <input type="file" name="image" class="form-control">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-success">Upload</button>
+                                </div>
+
+                            </div>
+                        </form>
+
                     </div>
                 </div>
             </div>
@@ -28,11 +54,12 @@
                     <div class="col">
                         <div class="card shadow mb-3">
                             <div class="card-header py-3">
-                                <p class="text-primary m-0 font-weight-bold">User Settings</p>
+                                <p class="text-primary m-0 font-weight-bold">Profile information </p>
                             </div>
                             <div class="card-body">
-                                <form action="{{ url('updateprofile') }}" method="POST">
+                                <form action="{{ url('updateprofile') }}" method="post">
                                     @csrf
+
                                     <div class="form-row">
                                         <div class="col">
                                             <div class="form-group"><label
@@ -47,18 +74,20 @@
                                         </div>
                                     </div>
                                     <div class="form-group"><label for="address"><strong>Address</strong></label><input
-                                            class="form-control" type="text" placeholder="Sunset Blvd, 38" name="address">
+                                            class="form-control" type="text" value="{{ Auth::user()->address }}"
+                                            name="address">
                                     </div>
                                     <div class="form-row">
                                         <div class="col">
                                             <div class="form-group"><label
-                                                    for="city"><strong>City</strong></label><input class="form-control"
-                                                    type="text" placeholder="Benin" name="city"></div>
+                                                    for="Country"><strong>City</strong></label><input class="form-control"
+                                                    type="text" value="{{ Auth::user()->country }}" name="country">
+                                            </div>
                                         </div>
                                         <div class="col">
                                             <div class="form-group"><label for="tel"><strong>Phone
                                                         Number</strong></label><input class="form-control" type="tel"
-                                                    value="+22997933988" name="tel">
+                                                    value="{{ Auth::user()->phoneNumber }}" name="phoneNumber">
                                             </div>
                                         </div>
                                     </div>
@@ -73,16 +102,24 @@
                                 <p class="text-primary m-0 font-weight-bold">Change your password</p>
                             </div>
                             <div class="card-body">
-                                <form>
-                                    <div class="form-group"><label for="Old_password"><strong>Old
-                                                password</strong></label><input class="form-control" type="password"
-                                            name="Old_password">
+                                @if ($errors->has('password'))
+                                    <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                                @endif
+                                <form action="{{ url('updatePassword') }}" method="post">
+                                    @csrf
+                                    <div class="form-group ">
+                                        <label for="password"><strong>Old
+                                                password</strong></label>
+                                        <input class="form-control" type="password" name="password">
+
                                     </div>
                                     <div class="form-row">
                                         <div class="col">
-                                            <div class="form-group"><label for="New_pasword"><strong>New
+                                            <div class="form-group"><label for="new_pasword"><strong>New
                                                         password</strong></label><input class="form-control" type="text"
-                                                    name="New_password"></div>
+                                                    name="new_password"></div>
                                         </div>
                                     </div>
                                     <div class="form-group"><button class="btn btn-primary btn-sm"

@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('description');
             $table->integer('quantity_init');
             $table->double('price_unit');
-            $table->timestamp('expiration_date');
+            $table->string('image')->nullable();
+            $table->date('expiration_date')->nullable();
             $table->timestamps();
             $table->unsignedBigInteger('room_id');
             $table->foreign('room_id')

@@ -46,13 +46,13 @@ class SellEventController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\SellEvent  $sellEvent
-          */
+     */
     public function show(SellEvent $sellEvent)
     {
-        $sellEvent=DB::table('sell_events');
-        $number=$sellEvent->count('id');
-        $historique=SellEvent::orderBy('id','desc')->paginate(intval($number/2));
-        return view('pages.historique',['historique'=>$historique]);
+        $sellEvent = DB::table('sell_events');
+        $number = $sellEvent->count('id');
+        $historique = SellEvent::orderBy('sold_at', 'desc')->paginate(intval($number / 2));
+        return view('pages.historique', ['historique' => $historique]);
     }
 
     /**

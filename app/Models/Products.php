@@ -9,7 +9,13 @@ use Illuminate\Database\Eloquent\Model;
 class Products extends Model
 {
     use HasFactory;
-
+    protected $fillable = [
+        'name',
+        'description',
+        'quantity_init',
+        'price_unit',
+        'expiration_date',
+    ];
     public $quantitySell=[];
 
     public function room()

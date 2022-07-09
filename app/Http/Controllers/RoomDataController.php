@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Products;
 use App\Models\RoomData;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class RoomDataController extends Controller
 {
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'verified']);
     }
     /**
      * Display a listing of the resource.
@@ -21,7 +22,7 @@ class RoomDataController extends Controller
     public function index()
     {
         //
-          return view('pages.conservation');
+        return view('pages.conservation');
     }
 
     /**
@@ -42,7 +43,12 @@ class RoomDataController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Storage::append(
+            "arduino-log.txt",
+            "Time: " . now()->format("Y-m-d H:i:s") . ', ' .
+                "Temperature: " . $request->get("temperature", "n/a") . '°C, ' .
+                "Humidity: " . $request->get("humidity", "n/a") . '%'
+        );
     }
 
     /**
@@ -57,12 +63,12 @@ class RoomDataController extends Controller
 
     }
 
-     public function showAll()
+    public function showAll()
     {
         //
-          $data=RoomData::get();
+        $data = RoomData::get();
 
-        return view('pages.conservation',compact('data',));
+        return view('pages.conservation', compact('data',));
     }
 
 
