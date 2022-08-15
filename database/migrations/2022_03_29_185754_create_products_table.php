@@ -21,15 +21,13 @@ return new class extends Migration
             $table->double('price_unit');
             $table->string('image')->nullable();
             $table->date('expiration_date')->nullable();
-            $table->timestamps();
             $table->unsignedBigInteger('room_id');
             $table->foreign('room_id')
-                  ->references('id')
-                  ->on('rooms')
-                  ->onDelete('cascade')
-                  ->onUpdate('cascade');
-
-
+                ->references('id')
+                ->on('rooms')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->timestamps();
         });
     }
 

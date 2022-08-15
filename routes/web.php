@@ -23,15 +23,23 @@ use Illuminate\Support\Str;
 |
 */
 
-Route::post("/data", function (Request $request) {
-    info($request);
-    dd($request);
+Route::get("/demo", function () {
     SellEvent::create([
-        'quantity' => $request['temperature'],
-
+        'quantity' => 2,
+        'Card_Subscribers_id' => 2,
+        'product_id' => 3,
     ]);
-    return $request;
 });
+
+// Route::post("/send", function (Request $request) {
+
+//     SellEvent::create([
+//         'quantity' => 2,
+//         'Card_Subscribers_id' => 2,
+//         'product_id' => 3,
+//     ]);
+//     return $request;
+// });
 
 Route::get('/', [App\Http\Controllers\Controller::class, 'showAll']);
 

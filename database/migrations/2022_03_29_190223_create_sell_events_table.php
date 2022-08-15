@@ -19,11 +19,13 @@ return new class extends Migration
             $table->integer('Card_Subscribers_id');
             $table->timestamp('sold_at');
             $table->unsignedBigInteger('product_id');
+
             $table->foreign('product_id')
                 ->references('id')
                 ->on('products')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
+            $table->timestamps();
         });
     }
 
